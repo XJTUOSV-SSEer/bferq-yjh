@@ -3,7 +3,7 @@
 ~~~
 │  README.MD
 └─src
-    ├─AR-DSSE								//储存AR-DSSE方案的源码
+    ├─BFERQ								//储存AR-DSSE方案的源码
     │  │  abi.json							//智能合约对应的abi
     │  │  blockchain.py						//client、server与区块链通信相关的源码
     │  │  Bytecode							//智能合约的字节码
@@ -22,7 +22,7 @@
     │          client.cpython-36.pyc
     │          server.cpython-36.pyc
     │          
-    ├─ARR-DSSE								//储存AR-DSSE方案的源码
+    ├─BFERQBF							//储存AR-DSSE方案的源码
     │  │  abi.json							//智能合约对应的abi
     │  │  blockchain.py						//client、server与区块链通信相关的源码
     │  │  client.py							//client端源码
