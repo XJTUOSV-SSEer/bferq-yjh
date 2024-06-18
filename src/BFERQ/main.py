@@ -231,14 +231,9 @@ def test_scheme_deny(lb, ub, state_client, K_s, K_e, map_server, eth_contract, f
 
 
 
-
-
-
-
-
 ############################################ 以太坊账户、合约定义 ####################################
 # 从当前目录下的abi.json文件读取abi
-with open('./abi.json', 'r', encoding='utf8')as fp:
+with open('abi.json', 'r', encoding='utf8')as fp:
     contract_abi = json.load(fp)
 # print(contract_abi)
 
@@ -246,11 +241,11 @@ with open('./abi.json', 'r', encoding='utf8')as fp:
 w3 = Web3(Web3.WebsocketProvider("ws://127.0.0.1:8545"))
 
 # client/server的账户from_account
-from_account = w3.toChecksumAddress(input('输入server/client的eth账户:'))
+from_account = w3.toChecksumAddress('0xc150678397B25Fc715712EAEf2377E563E69Ba7d')
 
 # 创建合约对象eth_contract
 eth_contract = w3.eth.contract(
-    address=w3.toChecksumAddress(input('输入合约账户:')),
+    address=w3.toChecksumAddress('0x0746E768C6d57642591e6F0EA498B2abFd39E80A'),
     abi=contract_abi
 )
 
@@ -258,13 +253,19 @@ eth_contract = w3.eth.contract(
 ################################################# 数据准备 #############################################
 
 # 从二进制文件中读取build用的字典数据 inverted_index
-with open("data_10K.txt", 'rb') as f:  # 打开文件
+with open("../data/data_400.txt", 'rb') as f:  # 打开文件
     inverted_index = pickle.load(f)
+
+# key = b'secret_key'
+# digestmod = hashlib.sha256  # 使用sha256散列算法
 
 
 # 生成K_e,K_s，使用hmac来生成
 K_e = hmac.new(b'hong').digest()
 K_s = hmac.new(b'guang').digest()
+# K_e  = hmac.new( b'hong').digest()
+# K_s = hmac.new(b'guang').digest()
+
 print('K_e=', K_e.hex())
 print('K_s=', K_s.hex())
 
@@ -317,6 +318,7 @@ print(result_set)
 # 调用智能合约，将checklist发送至区块链
 # 对checklist中每个l_w->digest pair，调用一次智能合约将其写入区块链
 for l_w in checklist:
+
     tx_hash = eth_contract.functions.set(l_w, checklist[l_w]).transact({
         "from": from_account,
         "gas": 3000000,

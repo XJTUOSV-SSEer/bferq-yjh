@@ -1,0 +1,88 @@
+[
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "totalnumber",
+				"type": "uint256"
+			}
+		],
+		"name": "cal_digest",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "get_is_equal",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "my_block",
+				"type": "bytes32[]"
+			},
+			{
+				"name": "len",
+				"type": "uint256"
+			},
+			{
+				"name": "blocknum",
+				"type": "uint256"
+			}
+		],
+		"name": "batch_cal_hash",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "l_w",
+				"type": "bytes16"
+			},
+			{
+				"name": "digest_new",
+				"type": "bytes32"
+			}
+		],
+		"name": "set",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "l_w_list",
+				"type": "bytes16[]"
+			},
+			{
+				"name": "len",
+				"type": "uint256"
+			}
+		],
+		"name": "judge",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]

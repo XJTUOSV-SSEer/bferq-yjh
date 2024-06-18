@@ -1,4 +1,3 @@
-from pydoc import cli
 import client
 import server
 import blockchain
@@ -6,8 +5,6 @@ import json
 import pickle
 import hmac
 from web3 import Web3
-import random
-import sys
 import time
 
 
@@ -56,7 +53,7 @@ def experiment_add(dataset):
         new_kw_files = pickle.load(f)
 
     t1=time.time()
-    client.update_client(K_e,K_s,new_kw_files,state_client,map_server)
+    client.update_client(K_e, K_s, new_kw_files, state_client, map_server)
     t2=time.time()
 
     return t2-t1
@@ -78,7 +75,7 @@ def experiment_token(lb,ub):
     ub=str(ub)
 
     t1=time.time()
-    ST,d,Wset=client.token_client(lb,ub,state_client,K_s)
+    ST,d,Wset= client.token_client(lb, ub, state_client, K_s)
     t2=time.time()
 
     return t2-t1,len(Wset)
@@ -97,10 +94,10 @@ def experiment_search(lb,ub):
     '''
     lb=str(lb)
     ub=str(ub)
-    ST,d,Wset=client.token_client(lb,ub,state_client,K_s)
+    ST,d,Wset= client.token_client(lb, ub, state_client, K_s)
 
     t1=time.time()
-    server.search_server(ST,map_server)
+    server.search_server(ST, map_server)
     t2=time.time()
     return t2-t1
 
@@ -118,11 +115,11 @@ def experiment_verify(lb,ub):
     '''
     lb=str(lb)
     ub=str(ub)
-    ST,d,Wset=client.token_client(lb,ub,state_client,K_s)
-    results=server.search_server(ST,map_server)
+    ST,d,Wset= client.token_client(lb, ub, state_client, K_s)
+    results= server.search_server(ST, map_server)
 
     t1=time.time()
-    flag=client.verify_client(results,d)
+    flag= client.verify_client(results, d)
     t2=time.time()
     print(flag)
     return t2-t1
@@ -141,11 +138,11 @@ def experiment_decrypt(lb,ub):
     '''
     lb=str(lb)
     ub=str(ub)
-    ST,d,Wset=client.token_client(lb,ub,state_client,K_s)
-    results=server.search_server(ST,map_server)
+    ST,d,Wset= client.token_client(lb, ub, state_client, K_s)
+    results= server.search_server(ST, map_server)
 
     t1=time.time()
-    flag=client.decrypt_client(results,K_e)
+    flag= client.decrypt_client(results, K_e)
     t2=time.time()
     return t2-t1
 
@@ -165,12 +162,12 @@ def experiment_judge(lb,ub):
     '''
     lb=str(lb)
     ub=str(ub)
-    ST,d,Wset=client.token_client(lb,ub,state_client,K_s)
-    results=server.search_server(ST,map_server)
-    l_w_list=client.get_lw_list(state_client,Wset,K_s)
+    ST,d,Wset= client.token_client(lb, ub, state_client, K_s)
+    results= server.search_server(ST, map_server)
+    l_w_list= client.get_lw_list(state_client, Wset, K_s)
 
     t1=time.time()
-    flag,gas=blockchain.verify(results,eth_contract,from_account,l_w_list)
+    flag,gas= blockchain.verify(results, eth_contract, from_account, l_w_list)
     t2=time.time()
     print(flag)
     return t2-t1,gas
@@ -186,7 +183,7 @@ def experiment_judge(lb,ub):
 
 ############################################ 以太坊账户、合约定义 ####################################
 # 从当前目录下的abi.json文件读取abi
-with open('./abi.json', 'r', encoding='utf8')as fp:
+with open('abi.json', 'r', encoding='utf8')as fp:
     contract_abi = json.load(fp)
 # print(contract_abi)
 
@@ -346,7 +343,7 @@ print('K_s=', K_s.hex())
 # 先用10K数据集进行build
 with open('../data/data_10K.txt', 'rb') as f:  # 打开文件
         inverted_index = pickle.load(f)
-state_client,map_server,checklist=client.build_client(K_e,K_s,inverted_index)
+state_client,map_server,checklist= client.build_client(K_e, K_s, inverted_index)
 
 # [0,200]
 # t=0
@@ -385,7 +382,7 @@ state_client,map_server,checklist=client.build_client(K_e,K_s,inverted_index)
 # 先用10K数据集进行build
 with open('../data/data_10K.txt', 'rb') as f:  # 打开文件
         inverted_index = pickle.load(f)
-state_client,map_server,checklist=client.build_client(K_e,K_s,inverted_index)
+state_client,map_server,checklist= client.build_client(K_e, K_s, inverted_index)
 
 
 # 0-200
@@ -467,7 +464,7 @@ state_client,map_server,checklist=client.build_client(K_e,K_s,inverted_index)
 # 先用10K数据集进行build，并设置对应的checklist
 with open('../data/data_2K.txt', 'rb') as f:  # 打开文件
         inverted_index = pickle.load(f)
-state_client,map_server,checklist=client.build_client(K_e,K_s,inverted_index)
+state_client,map_server,checklist= client.build_client(K_e, K_s, inverted_index)
 for l_w in checklist:
     tx_hash = eth_contract.functions.set(l_w, checklist[l_w]).transact({
         "from": from_account,
