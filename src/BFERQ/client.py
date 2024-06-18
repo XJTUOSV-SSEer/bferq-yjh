@@ -197,7 +197,7 @@ def build_client(K_e, K_s, inverted_index):
     # 遍历所有关键词kw
     for kw in kw_files_list:
         # 初始化状态
-        c = 0
+        i = 0
         v = 0
         h = int(0).to_bytes(32, 'big', signed=True)
 
@@ -216,36 +216,23 @@ def build_client(K_e, K_s, inverted_index):
         # 生成一个AES对象，密钥是K_e，即用于加密的Enc算法。
         Enc = AES.new(key=K_e, mode=AES.MODE_ECB)
 
+        #计算映射表I的下标addr
+        addr = PRF_G.encrypt(K_w,gamma_0)
+
         # 遍历该w对应的所有文件id
         # 当前的gamma
-        gamma_now = gamma_0
         for ind in kw_files_list[kw]:
-
-            # 生成新的gamma_next
-            r = random.randint(-sys.maxsize-1, sys.maxsize)
-            gamma_next = hmac.new(int(r).to_bytes(
-                length=16, byteorder='big', signed='True')).digest()
-
-            # 生成当前地址
-            addr = PRF_G.encrypt(gamma_now)
-
-            # 密文的第一部分 addr xor gamma_next
-            pos = bytes(a ^ b for a, b in zip(addr, gamma_next))
-
-            # 密文的第二部分 Enc(K_w,ind||c)
+            # 密文 Enc(K_w,ind||i)
             ind_bytes = ind.zfill(16).encode('utf-8')
-            c_bytes = int(c).to_bytes(16, 'big', signed='True')
+            c_bytes = int(i).to_bytes(16, 'big', signed='True')
             val = Enc.encrypt(ind_bytes)+Enc.encrypt(c_bytes)  # 32字节的密文
 
             # I.put(addr,(P,V))
-            map_server[addr] = [pos, val]
+            map_server[addr] = val
 
             # 计算哈希值，要用solidity的keccak哈希函数
             h = bytes(a ^ b for a, b in zip(h, Web3.keccak(val)))
-            c = c+1
-
-            # 更新gamma_now
-            gamma_now=gamma_next
+            i = i+1
 
         # 计算l_w，更新checklist
         # H(Kw||v)
@@ -254,7 +241,7 @@ def build_client(K_e, K_s, inverted_index):
         checklist[l_w] = h
 
         # 更新状态表
-        state_client[kw] = [c, v, gamma_0, h]
+        state_client[kw] = [i, v, gamma_0, h]
 
     # 返回三个字典容器
     return state_client, map_server, checklist
