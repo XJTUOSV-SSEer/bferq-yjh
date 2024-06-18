@@ -101,9 +101,9 @@ sudo docker run --detach --publish 8545:8545 trufflesuite/ganache-cli:latest
 remixd -s /Users/yujiahe123/remixPath https://remix.ethereum.org/
 
 ACCOUNT ADDRESS
-0x6bA9388c3FB86Bb5215F6168f5f7E79B5270C6D8
+0x..
 PRIVATE KEY
-0x7985e0974cc77a87300e51a02c187c0977d92ed04a346a6fce9873c05966b0d5
+0x..
 
 
 ~~~
